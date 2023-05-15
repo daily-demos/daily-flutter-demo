@@ -1,0 +1,24 @@
+name: daily_flutter_demo
+description: Demo application showcasing use of the Daily Flutter SDK.
+version: 0.1.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+publish_to: none
+
+dependencies:
+  collection: ^1.16.0
+  daily_flutter: ^0.1.0-alpha.4-1
+  flutter:
+    sdk: flutter
+  freezed_annotation: ^2.2.0
+  logging: ^1.1.0
+  shared_preferences:
+  wakelock: ^0.6.2
+
+dev_dependencies:
+  flutter_lints: ^2.0.1
+
+flutter:
+  uses-material-design: true
