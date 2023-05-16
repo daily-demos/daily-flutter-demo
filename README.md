@@ -15,25 +15,24 @@ This demo showcases a basic video chat app that uses Daily's [Flutter SDK](https
 In the demo app, a user must enter a URL for a [Daily room](https://docs.daily.co/reference#rooms), then press Join.
 The app will find the meeting room and join the call.
 
-The app initializes a `CallClient`, which is the main entrypoint to the SDK. It provides an API for interacting 
-with the meeting and keeps track of important information about the meeting, like other participants (including 
+The app initializes a `CallClient`, which is the main entrypoint to the SDK. It provides an API for interacting
+with the meeting and keeps track of important information about the meeting, like other participants (including
 their audio and video tracks) and the things they do on the call (e.g., muting their mic or leaving).
 
 Most of the client's internal state can be accessed synchronously through getters on the object, but updates can
-also be received asynchronously by listening to the [client's event stream](https://pub.dev/documentation/daily_flutter/latest/daily_flutter/CallClient/events.html). 
+also be received asynchronously by listening to the [client's event stream](https://pub.dev/documentation/daily_flutter/latest/daily_flutter/CallClient/events.html).
 
 When the user leaves the meeting room, the `CallClient` remains and can be re-used for further calls. In this demo, it
 is not destroyed until the application exits.
 
-When testing or running this demo, you'll likely use a room you've manually created for calls. A production application 
-will likely need to use the [Daily REST API](https://docs.daily.co/reference/rest-api) to create rooms on the fly for 
-your users, which necessitates the use of a sensitive Daily API key. You likely don't want to embed this key in a 
+When testing or running this demo, you'll likely use a room you've manually created for calls. A production application
+will likely need to use the [Daily REST API](https://docs.daily.co/reference/rest-api) to create rooms on the fly for
+your users, which necessitates the use of a sensitive Daily API key. You likely don't want to embed this key in a
 production app. We recommend running a web server and keeping sensitive things like API keys there instead.
 
-Please note that this project is designed to work with rooms that have [privacy](https://www.daily.co/blog/intro-to-room-access-control/)
-set to `public`. If you are hardcoding a room URL, please bear in mind that token creation, pre-authorization and 
-knock-for-access have not been implemented here, meaning you may not be able to join non-public meeting rooms using this 
-demo for now.
+This project is designed to work with rooms that have privacy set to public or private. When joining a private room,
+you must provide a valid token to access the room. At the moment, knocking for access is not supported, meaning that
+a token is always required when joining a private room.
 
 ## Running locally
 
