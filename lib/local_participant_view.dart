@@ -20,7 +20,6 @@ class LocalParticipantView extends StatefulWidget {
 class _LocalParticipantViewState extends State<LocalParticipantView> {
   StreamSubscription? _eventSubscription;
   final _controller = VideoViewController();
-  late String _username = widget.client.participants.local.info.username ?? 'Guest';
 
   @override
   void initState() {
@@ -30,21 +29,11 @@ class _LocalParticipantViewState extends State<LocalParticipantView> {
       if (!mounted) return;
       event.whenOrNull<void>(
         inputsUpdated: (inputs) {
-          _controller
-              .setTrack(inputs.camera.isEnabled ? widget.client.participants.local.media?.camera.track : null)
-              .whenComplete(() => setState(() {}));
+          _controller.setTrack(inputs.camera.isEnabled ? widget.client.participants.local.media?.camera.track : null);
         },
         participantUpdated: (participant) {
           if (!participant.info.isLocal) return;
-          _controller
-              .setTrack(widget.client.inputs.camera.isEnabled ? participant.media?.camera.track : null)
-              .whenComplete(() {
-            if (!mounted) return;
-            setState(() {
-              final username = widget.client.participants.local.info.username;
-              _username = username == null || username.isEmpty ? 'Guest' : username;
-            });
-          });
+          _controller.setTrack(widget.client.inputs.camera.isEnabled ? participant.media?.camera.track : null);
         },
       );
     });
@@ -59,12 +48,14 @@ class _LocalParticipantViewState extends State<LocalParticipantView> {
 
   @override
   Widget build(BuildContext context) {
+    final username = CallClientState.usernameOf(context);
+    final mirrorVideoView = CallClientState.inputsOf(context).camera.settings.facingMode == MediaTrackFacingMode.user;
     return GestureDetector(
       onTap: () async {
-        final username = await showUserSettingsBottomSheet(context, _username);
-        if (!mounted || username == null) return;
-        await widget.client.setUsername(username);
-        await widget.prefs.setString('username', username);
+        final newUsername = await showUserSettingsBottomSheet(context, username);
+        if (!mounted || newUsername == null) return;
+        await widget.client.setUsername(newUsername);
+        await widget.prefs.setString('username', newUsername);
       },
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -79,9 +70,12 @@ class _LocalParticipantViewState extends State<LocalParticipantView> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 clipBehavior: Clip.hardEdge,
-                child: widget.client.inputs.camera.isEnabled
+                child: CallClientState.inputsOf(context).camera.isEnabled
                     // Showing the local user to themselves as if in a mirror is common practice
-                    ? Transform.scale(scaleX: -1, child: VideoView(controller: _controller, fit: VideoViewFit.cover))
+                    ? Transform.scale(
+                        scaleX: mirrorVideoView ? -1 : 1,
+                        child: VideoView(controller: _controller, fit: VideoViewFit.cover),
+                      )
                     : const Center(child: Icon(Icons.videocam_off, color: Colors.white)),
               ),
               Align(
@@ -108,7 +102,7 @@ class _LocalParticipantViewState extends State<LocalParticipantView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        _username,
+                        username == null || username.isEmpty ? 'Guest' : username,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall

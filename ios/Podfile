@@ -31,7 +31,7 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  if File.exists?('DailyFlutter-iOS.podspec')
+  if File.exist?('DailyFlutter-iOS.podspec')
     pod 'DailyFlutter-iOS', :podspec => 'DailyFlutter-iOS.podspec'
   end
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))

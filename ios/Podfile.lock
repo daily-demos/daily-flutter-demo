@@ -1,8 +1,8 @@
 PODS:
-  - daily_flutter (0.1.0-alpha.4):
-    - DailyFlutter-iOS (= 0.1.0-alpha.4)
+  - daily_flutter (0.16.0-beta.1):
+    - DailyFlutter-iOS (= 0.16.0-beta.1)
     - Flutter
-  - DailyFlutter-iOS (0.1.0-alpha.4):
+  - DailyFlutter-iOS (0.16.0-beta.1):
     - Flutter
   - Flutter (1.0.0)
   - permission_handler_apple (9.0.4):
@@ -17,7 +17,7 @@ DEPENDENCIES:
   - daily_flutter (from `.symlinks/plugins/daily_flutter/ios`)
   - Flutter (from `Flutter`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
 SPEC REPOS:
@@ -32,18 +32,18 @@ EXTERNAL SOURCES:
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
-  daily_flutter: 427eb8a8506d3928e1a717be8d09238f101f1b21
-  DailyFlutter-iOS: 98fc348f1cd6cba6b0b6d1cfca2b1fecb1d5f998
+  daily_flutter: 00c3883fec3a7ed0d9e0a056da2c09a3b014ddca
+  DailyFlutter-iOS: af7376b9ed1bcab8f364eda049f6fa7cf4892f80
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 
-PODFILE CHECKSUM: 7b0c54f0e5655b4755cb84c864d30ffbd1921472
+PODFILE CHECKSUM: 0bd948817bdf6ac2ac1b73b47b448ff3bfae9c37
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.14.3

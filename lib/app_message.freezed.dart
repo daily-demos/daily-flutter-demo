@@ -12,7 +12,7 @@ part of 'app_message.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AppMessage {
@@ -88,9 +88,10 @@ class _$AppMessageCopyWithImpl<$Res, $Val extends AppMessage>
 }
 
 /// @nodoc
-abstract class _$$MessageCopyWith<$Res> {
-  factory _$$MessageCopyWith(_$Message value, $Res Function(_$Message) then) =
-      __$$MessageCopyWithImpl<$Res>;
+abstract class _$$MessageImplCopyWith<$Res> {
+  factory _$$MessageImplCopyWith(
+          _$MessageImpl value, $Res Function(_$MessageImpl) then) =
+      __$$MessageImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {String event,
@@ -101,10 +102,11 @@ abstract class _$$MessageCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$MessageCopyWithImpl<$Res>
-    extends _$AppMessageCopyWithImpl<$Res, _$Message>
-    implements _$$MessageCopyWith<$Res> {
-  __$$MessageCopyWithImpl(_$Message _value, $Res Function(_$Message) _then)
+class __$$MessageImplCopyWithImpl<$Res>
+    extends _$AppMessageCopyWithImpl<$Res, _$MessageImpl>
+    implements _$$MessageImplCopyWith<$Res> {
+  __$$MessageImplCopyWithImpl(
+      _$MessageImpl _value, $Res Function(_$MessageImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -114,7 +116,7 @@ class __$$MessageCopyWithImpl<$Res>
     Object? fromParticipantId = null,
     Object? data = null,
   }) {
-    return _then(_$Message(
+    return _then(_$MessageImpl(
       event: null == event
           ? _value.event
           : event // ignore: cast_nullable_to_non_nullable
@@ -141,8 +143,8 @@ class __$$MessageCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable(createFactory: false)
-class _$Message implements Message {
-  const _$Message(
+class _$MessageImpl implements Message {
+  const _$MessageImpl(
       {required this.event,
       required this.fromParticipantId,
       required final Map<String, dynamic> data,
@@ -171,10 +173,10 @@ class _$Message implements Message {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Message &&
+            other is _$MessageImpl &&
             (identical(other.event, event) || other.event == event) &&
             (identical(other.fromParticipantId, fromParticipantId) ||
                 other.fromParticipantId == fromParticipantId) &&
@@ -189,8 +191,8 @@ class _$Message implements Message {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MessageCopyWith<_$Message> get copyWith =>
-      __$$MessageCopyWithImpl<_$Message>(this, _$identity);
+  _$$MessageImplCopyWith<_$MessageImpl> get copyWith =>
+      __$$MessageImplCopyWithImpl<_$MessageImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -268,7 +270,7 @@ class _$Message implements Message {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MessageToJson(
+    return _$$MessageImplToJson(
       this,
     );
   }
@@ -278,21 +280,21 @@ abstract class Message implements AppMessage {
   const factory Message(
       {required final String event,
       required final ParticipantId fromParticipantId,
-      required final Map<String, dynamic> data}) = _$Message;
+      required final Map<String, dynamic> data}) = _$MessageImpl;
 
   String get event;
   ParticipantId get fromParticipantId;
   Map<String, dynamic> get data;
   @JsonKey(ignore: true)
-  _$$MessageCopyWith<_$Message> get copyWith =>
+  _$$MessageImplCopyWith<_$MessageImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ChatMessageCopyWith<$Res> {
-  factory _$$_ChatMessageCopyWith(
-          _$_ChatMessage value, $Res Function(_$_ChatMessage) then) =
-      __$$_ChatMessageCopyWithImpl<$Res>;
+abstract class _$$ChatMessageImplCopyWith<$Res> {
+  factory _$$ChatMessageImplCopyWith(
+          _$ChatMessageImpl value, $Res Function(_$ChatMessageImpl) then) =
+      __$$ChatMessageImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ChatMessage message});
 
@@ -300,11 +302,11 @@ abstract class _$$_ChatMessageCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ChatMessageCopyWithImpl<$Res>
-    extends _$AppMessageCopyWithImpl<$Res, _$_ChatMessage>
-    implements _$$_ChatMessageCopyWith<$Res> {
-  __$$_ChatMessageCopyWithImpl(
-      _$_ChatMessage _value, $Res Function(_$_ChatMessage) _then)
+class __$$ChatMessageImplCopyWithImpl<$Res>
+    extends _$AppMessageCopyWithImpl<$Res, _$ChatMessageImpl>
+    implements _$$ChatMessageImplCopyWith<$Res> {
+  __$$ChatMessageImplCopyWithImpl(
+      _$ChatMessageImpl _value, $Res Function(_$ChatMessageImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -312,7 +314,7 @@ class __$$_ChatMessageCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$_ChatMessage(
+    return _then(_$ChatMessageImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -331,8 +333,8 @@ class __$$_ChatMessageCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable(createFactory: false)
-class _$_ChatMessage implements _ChatMessage {
-  const _$_ChatMessage({required this.message, final String? $type})
+class _$ChatMessageImpl implements _ChatMessage {
+  const _$ChatMessageImpl({required this.message, final String? $type})
       : $type = $type ?? 'chatMessage';
 
   @override
@@ -347,10 +349,10 @@ class _$_ChatMessage implements _ChatMessage {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ChatMessage &&
+            other is _$ChatMessageImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -361,8 +363,8 @@ class _$_ChatMessage implements _ChatMessage {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ChatMessageCopyWith<_$_ChatMessage> get copyWith =>
-      __$$_ChatMessageCopyWithImpl<_$_ChatMessage>(this, _$identity);
+  _$$ChatMessageImplCopyWith<_$ChatMessageImpl> get copyWith =>
+      __$$ChatMessageImplCopyWithImpl<_$ChatMessageImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -440,7 +442,7 @@ class _$_ChatMessage implements _ChatMessage {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ChatMessageToJson(
+    return _$$ChatMessageImplToJson(
       this,
     );
   }
@@ -448,19 +450,19 @@ class _$_ChatMessage implements _ChatMessage {
 
 abstract class _ChatMessage implements AppMessage {
   const factory _ChatMessage({required final ChatMessage message}) =
-      _$_ChatMessage;
+      _$ChatMessageImpl;
 
   ChatMessage get message;
   @JsonKey(ignore: true)
-  _$$_ChatMessageCopyWith<_$_ChatMessage> get copyWith =>
+  _$$ChatMessageImplCopyWith<_$ChatMessageImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ChatMessageReactionCopyWith<$Res> {
-  factory _$$_ChatMessageReactionCopyWith(_$_ChatMessageReaction value,
-          $Res Function(_$_ChatMessageReaction) then) =
-      __$$_ChatMessageReactionCopyWithImpl<$Res>;
+abstract class _$$ChatMessageReactionImplCopyWith<$Res> {
+  factory _$$ChatMessageReactionImplCopyWith(_$ChatMessageReactionImpl value,
+          $Res Function(_$ChatMessageReactionImpl) then) =
+      __$$ChatMessageReactionImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ChatMessageReaction reaction});
 
@@ -468,11 +470,11 @@ abstract class _$$_ChatMessageReactionCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ChatMessageReactionCopyWithImpl<$Res>
-    extends _$AppMessageCopyWithImpl<$Res, _$_ChatMessageReaction>
-    implements _$$_ChatMessageReactionCopyWith<$Res> {
-  __$$_ChatMessageReactionCopyWithImpl(_$_ChatMessageReaction _value,
-      $Res Function(_$_ChatMessageReaction) _then)
+class __$$ChatMessageReactionImplCopyWithImpl<$Res>
+    extends _$AppMessageCopyWithImpl<$Res, _$ChatMessageReactionImpl>
+    implements _$$ChatMessageReactionImplCopyWith<$Res> {
+  __$$ChatMessageReactionImplCopyWithImpl(_$ChatMessageReactionImpl _value,
+      $Res Function(_$ChatMessageReactionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -480,7 +482,7 @@ class __$$_ChatMessageReactionCopyWithImpl<$Res>
   $Res call({
     Object? reaction = null,
   }) {
-    return _then(_$_ChatMessageReaction(
+    return _then(_$ChatMessageReactionImpl(
       reaction: null == reaction
           ? _value.reaction
           : reaction // ignore: cast_nullable_to_non_nullable
@@ -499,8 +501,8 @@ class __$$_ChatMessageReactionCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable(createFactory: false)
-class _$_ChatMessageReaction implements _ChatMessageReaction {
-  const _$_ChatMessageReaction({required this.reaction, final String? $type})
+class _$ChatMessageReactionImpl implements _ChatMessageReaction {
+  const _$ChatMessageReactionImpl({required this.reaction, final String? $type})
       : $type = $type ?? 'chatMessageReaction';
 
   @override
@@ -515,10 +517,10 @@ class _$_ChatMessageReaction implements _ChatMessageReaction {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ChatMessageReaction &&
+            other is _$ChatMessageReactionImpl &&
             (identical(other.reaction, reaction) ||
                 other.reaction == reaction));
   }
@@ -530,8 +532,8 @@ class _$_ChatMessageReaction implements _ChatMessageReaction {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ChatMessageReactionCopyWith<_$_ChatMessageReaction> get copyWith =>
-      __$$_ChatMessageReactionCopyWithImpl<_$_ChatMessageReaction>(
+  _$$ChatMessageReactionImplCopyWith<_$ChatMessageReactionImpl> get copyWith =>
+      __$$ChatMessageReactionImplCopyWithImpl<_$ChatMessageReactionImpl>(
           this, _$identity);
 
   @override
@@ -610,7 +612,7 @@ class _$_ChatMessageReaction implements _ChatMessageReaction {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ChatMessageReactionToJson(
+    return _$$ChatMessageReactionImplToJson(
       this,
     );
   }
@@ -618,10 +620,11 @@ class _$_ChatMessageReaction implements _ChatMessageReaction {
 
 abstract class _ChatMessageReaction implements AppMessage {
   const factory _ChatMessageReaction(
-      {required final ChatMessageReaction reaction}) = _$_ChatMessageReaction;
+          {required final ChatMessageReaction reaction}) =
+      _$ChatMessageReactionImpl;
 
   ChatMessageReaction get reaction;
   @JsonKey(ignore: true)
-  _$$_ChatMessageReactionCopyWith<_$_ChatMessageReaction> get copyWith =>
+  _$$ChatMessageReactionImplCopyWith<_$ChatMessageReactionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

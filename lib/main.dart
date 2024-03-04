@@ -39,6 +39,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _hasActiveCall = false;
+  bool _wasCameraEnabled = false;
+  bool _wasMicrophoneEnabled = false;
   StreamSubscription? _eventSubscription;
   final _participantFocusPriority = <ParticipantId>[];
   ParticipantId? _activeSpeakerToSet;
@@ -55,23 +57,18 @@ class _MyAppState extends State<MyApp> {
       ..updateSubscriptionProfiles(
         forProfiles: {
           SubscriptionProfile.base: const MediaSubscriptionSettingsUpdate.set(
-            camera: CameraSubscriptionSettingsUpdate.set(
+            camera: VideoSubscriptionSettingsUpdate.set(
               subscriptionState: SubscriptionStateUpdate.unsubscribed,
             ),
           ),
           SubscriptionProfile.activeRemote: const MediaSubscriptionSettingsUpdate.set(
-            camera: CameraSubscriptionSettingsUpdate.set(
+            camera: VideoSubscriptionSettingsUpdate.set(
               subscriptionState: SubscriptionStateUpdate.subscribed,
             ),
           ),
         },
       )
-      ..updateInputs(
-        inputs: const InputSettingsUpdate.set(
-          camera: CameraInputSettingsUpdate.set(isEnabled: BoolUpdate.set(true)),
-          microphone: MicrophoneInputSettingsUpdate.set(isEnabled: BoolUpdate.set(true)),
-        ),
-      );
+      ..setInputsEnabled(camera: true, microphone: true);
     _eventSubscription = widget.callClient.events.listen(_handleEvent);
   }
 
@@ -90,16 +87,41 @@ class _MyAppState extends State<MyApp> {
       callStateUpdated: (callStateData) {
         setState(() {
           final callState = callStateData.state;
-          if (callState == CallState.joining) {
-            unawaited(Wakelock.toggle(enable: true));
-          } else if (callState == CallState.left) {
-            _participantFocusPriority.clear();
-            _messageNotifier.value = [];
-            unawaited(Wakelock.toggle(enable: false));
-          }
+          callStateData.whenOrNull(
+            joining: () => unawaited(Wakelock.toggle(enable: true)),
+            joined: (config) {
+              final initialUsername = config.initialUserName;
+              if (initialUsername != null && initialUsername.isNotEmpty) {
+                widget.callClient.setUsername(initialUsername);
+              }
+              if (!config.initialCameraEnabled || !config.initialMicrophoneEnabled) {
+                widget.callClient.updateInputs(
+                  inputs: InputSettingsUpdate.set(
+                    camera: config.initialCameraEnabled
+                        ? null
+                        : const CameraInputSettingsUpdate.set(isEnabled: BoolUpdate.set(false)),
+                    microphone: config.initialMicrophoneEnabled
+                        ? null
+                        : const MicrophoneInputSettingsUpdate.set(isEnabled: BoolUpdate.set(false)),
+                  ),
+                );
+              }
+            },
+            left: () {
+              _participantFocusPriority.clear();
+              _messageNotifier.value = [];
+              // The camera and mic are automatically disabled after a call, set them back to what they were.
+              widget.callClient.setInputsEnabled(camera: _wasCameraEnabled, microphone: _wasMicrophoneEnabled);
+              unawaited(Wakelock.toggle(enable: false));
+            },
+          );
           _hasActiveCall = callState == CallState.joining || callState == CallState.joined;
         });
       },
+      inputsUpdated: (inputs) => setState(() {
+        _wasCameraEnabled = inputs.camera.isEnabled;
+        _wasMicrophoneEnabled = inputs.microphone.isEnabled;
+      }),
       activeSpeakerChanged: (participant) {
         if (!_hasActiveCall ||
             participant == null ||
@@ -226,136 +248,125 @@ class _MyAppState extends State<MyApp> {
     final theme = Theme.of(context);
     return MaterialApp(
       scaffoldMessengerKey: _scaffoldMessengerKey,
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Daily demo')),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 4, bottom: 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      DeviceSettingsBar(client: widget.callClient),
-                    ],
-                  ),
-                  Container(
-                    alignment: AlignmentDirectional.centerEnd,
-                    padding: const EdgeInsetsDirectional.only(end: 20),
-                    child: AnimatedSwitcher(
-                      duration: kThemeAnimationDuration,
-                      transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
-                      child: widget.callClient.callState != CallState.joined
-                          ? const SizedBox()
-                          : ChatButton(
-                              client: widget.callClient,
-                              messageNotifier: _messageNotifier,
-                              onChatMessageSent: (chatMessage) => _handleParsedAppMessage(
-                                AppMessage.chatMessage(message: chatMessage),
-                                widget.callClient.participants.local.id,
-                              ),
-                              onChatMessageReactionSent: (chatMessageReaction) => _handleParsedAppMessage(
-                                AppMessage.chatMessageReaction(reaction: chatMessageReaction),
-                                widget.callClient.participants.local.id,
-                              ),
-                            ),
+      home: CallClientStateProvider(
+        callClient: widget.callClient,
+        child: Scaffold(
+          appBar: AppBar(title: const Text('Daily demo')),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 4, bottom: 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DeviceSettingsBar(client: widget.callClient),
+                      ],
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AnimatedSwitcher(
-                    duration: kThemeAnimationDuration,
-                    transitionBuilder: (child, animation) => SizeTransition(
-                      axisAlignment: -1,
-                      sizeFactor: animation,
-                      axis: Axis.horizontal,
-                      child: child,
-                    ),
-                    child: widget.callClient.callState != CallState.joined
-                        ? const SizedBox()
-                        : Padding(
-                            padding: const EdgeInsetsDirectional.only(end: 4),
-                            child: RecordingButton(client: widget.callClient, prefs: widget.prefs),
-                          ),
-                  ),
-                  Expanded(child: RoomSettingsBar(client: widget.callClient, prefs: widget.prefs)),
-                ],
-              ),
-            ],
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(children: [LocalParticipantView(client: widget.callClient, prefs: widget.prefs)]),
-              if (widget.callClient.callState == CallState.joined && focusedParticipantId == null) ...[
-                const SizedBox(height: 80),
-                const Center(child: Text("There's no one else in this call"))
+                    Container(
+                      alignment: AlignmentDirectional.centerEnd,
+                      padding: const EdgeInsetsDirectional.only(end: 20),
+                      child: AnimatedSwitcher(
+                        duration: kThemeAnimationDuration,
+                        transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
+                        child: widget.callClient.callState != CallState.joined
+                            ? const SizedBox()
+                            : ChatButton(
+                                client: widget.callClient,
+                                messageNotifier: _messageNotifier,
+                                onChatMessageSent: (chatMessage) => _handleParsedAppMessage(
+                                  AppMessage.chatMessage(message: chatMessage),
+                                  widget.callClient.participants.local.id,
+                                ),
+                                onChatMessageReactionSent: (chatMessageReaction) => _handleParsedAppMessage(
+                                  AppMessage.chatMessageReaction(reaction: chatMessageReaction),
+                                  widget.callClient.participants.local.id,
+                                ),
+                              ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RecordingButton(client: widget.callClient, prefs: widget.prefs),
+                    Expanded(child: RoomSettingsBar(client: widget.callClient, prefs: widget.prefs)),
+                  ],
+                ),
               ],
-              if (focusedParticipantId != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: RemoteParticipantView(
-                    client: widget.callClient,
-                    participantId: focusedParticipantId,
-                    size: const Size.fromHeight(256),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(children: [LocalParticipantView(client: widget.callClient, prefs: widget.prefs)]),
+                if (widget.callClient.callState == CallState.joined && focusedParticipantId == null) ...[
+                  const SizedBox(height: 80),
+                  const Center(child: Text("There's no one else in this call"))
+                ],
+                if (focusedParticipantId != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: RemoteParticipantView(
+                      client: widget.callClient,
+                      participantId: focusedParticipantId,
+                      size: const Size.fromHeight(256),
+                    ),
                   ),
-                ),
-              if (_participantFocusPriority.length > 1)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      if (nextParticipant1 != null)
-                        RemoteParticipantView(
-                          client: widget.callClient,
-                          participantId: nextParticipant1,
-                          size: const Size.square(128),
-                        ),
-                      if (nextParticipant2 != null)
-                        RemoteParticipantView(
-                          client: widget.callClient,
-                          participantId: nextParticipant2,
-                          size: const Size.square(128),
-                        ),
-                      if (_participantListUpdatedNotifier.value.isNotEmpty)
-                        Builder(
-                          builder: (context) {
-                            return InkWell(
-                              onTap: () {
-                                showParticipantListBottomSheet(
-                                  context,
-                                  widget.callClient,
-                                  _participantListUpdatedNotifier,
-                                );
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.group, color: theme.colorScheme.primary),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    '+${_participantListUpdatedNotifier.value.length}',
-                                    style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        )
-                    ],
+                if (_participantFocusPriority.length > 1)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        if (nextParticipant1 != null)
+                          RemoteParticipantView(
+                            client: widget.callClient,
+                            participantId: nextParticipant1,
+                            size: const Size.square(128),
+                          ),
+                        if (nextParticipant2 != null)
+                          RemoteParticipantView(
+                            client: widget.callClient,
+                            participantId: nextParticipant2,
+                            size: const Size.square(128),
+                          ),
+                        if (_participantListUpdatedNotifier.value.isNotEmpty)
+                          Builder(
+                            builder: (context) {
+                              return InkWell(
+                                onTap: () {
+                                  showParticipantListBottomSheet(
+                                    context,
+                                    widget.callClient,
+                                    _participantListUpdatedNotifier,
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.group, color: theme.colorScheme.primary),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      '+${_participantListUpdatedNotifier.value.length}',
+                                      style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                      ],
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
