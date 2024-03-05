@@ -7,8 +7,6 @@ import 'package:daily_flutter_demo/room_parameters_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum CallAction { join, leave }
-
 class RoomSettingsBar extends StatefulWidget {
   const RoomSettingsBar({super.key, required this.client, required this.prefs});
 
@@ -20,9 +18,6 @@ class RoomSettingsBar extends StatefulWidget {
 }
 
 class _RoomSettingsBarState extends State<RoomSettingsBar> {
-  StreamSubscription? _eventSubscription;
-  bool _isLoading = false;
-  CallAction _action = CallAction.join;
   late Uri? _url = (() {
     final previous = widget.prefs.getStringList('roomUrls')?.firstOrNull;
     if (previous == null || previous.isEmpty) {
@@ -33,41 +28,13 @@ class _RoomSettingsBarState extends State<RoomSettingsBar> {
   String? _token;
 
   @override
-  void initState() {
-    super.initState();
-    _eventSubscription = widget.client.events.listen(_handleEvent);
-  }
-
-  void _handleEvent(Event event) {
-    if (!mounted) return;
-    event.whenOrNull(
-      callStateUpdated: (stateData) {
-        if (mounted) {
-          final state = stateData.state;
-          setState(() {
-            _isLoading = state == CallState.joining || state == CallState.leaving;
-            if (state == CallState.left) {
-              _action = CallAction.join;
-            } else if (state == CallState.joined) {
-              _action = CallAction.leave;
-            }
-          });
-        }
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _eventSubscription?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final url = _url;
     final bodySmall = Theme.of(context).textTheme.bodySmall;
+    final callState = CallClientState.callStateOf(context);
+    final isLoading = callState == CallState.joining || callState == CallState.leaving;
+    final canJoin = callState == CallState.initialized || callState == CallState.left;
     return GestureDetector(
       onTap: widget.client.callState != CallState.initialized && widget.client.callState != CallState.left
           ? null
@@ -132,27 +99,18 @@ class _RoomSettingsBarState extends State<RoomSettingsBar> {
             ),
             const SizedBox(width: 4),
             TextButton(
-              onPressed: _isLoading || url == null
+              onPressed: isLoading || url == null
                   ? null
                   : () async {
-                      setState(() => _isLoading = true);
                       try {
-                        await (_action == CallAction.join
-                            ? widget.client.join(url: url, token: _token)
-                            : widget.client.leave());
-                      } on DailyException catch (error, trace) {
-                        logger.severe('Failed to ${_action.name} call', error, trace);
-                        if (mounted) {
-                          setState(() => _isLoading = false);
-                        }
+                        await (canJoin ? widget.client.join(url: url, token: _token) : widget.client.leave());
+                      } on OperationFailedException catch (error, trace) {
+                        logger.severe('Failed to ${canJoin ? 'join' : 'leave'} call', error, trace);
                       }
                     },
-              child: _isLoading
+              child: isLoading
                   ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                  : Text(
-                      _action == CallAction.join ? 'Join' : 'Leave',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                  : Text(canJoin ? 'Join' : 'Leave', style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
           ],
         ),

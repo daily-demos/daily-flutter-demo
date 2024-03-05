@@ -6,21 +6,22 @@ part of 'app_message.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Map<String, dynamic> _$$MessageToJson(_$Message instance) => <String, dynamic>{
+Map<String, dynamic> _$$MessageImplToJson(_$MessageImpl instance) =>
+    <String, dynamic>{
       'event': instance.event,
       'fromParticipantId': instance.fromParticipantId,
       'data': instance.data,
       'runtimeType': instance.$type,
     };
 
-Map<String, dynamic> _$$_ChatMessageToJson(_$_ChatMessage instance) =>
+Map<String, dynamic> _$$ChatMessageImplToJson(_$ChatMessageImpl instance) =>
     <String, dynamic>{
       'message': instance.message,
       'runtimeType': instance.$type,
     };
 
-Map<String, dynamic> _$$_ChatMessageReactionToJson(
-        _$_ChatMessageReaction instance) =>
+Map<String, dynamic> _$$ChatMessageReactionImplToJson(
+        _$ChatMessageReactionImpl instance) =>
     <String, dynamic>{
       'reaction': instance.reaction,
       'runtimeType': instance.$type,

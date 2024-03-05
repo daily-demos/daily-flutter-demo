@@ -12,7 +12,7 @@ part of 'chat_message.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 ChatMessageReaction _$ChatMessageReactionFromJson(Map<String, dynamic> json) {
   return _ChatMessageReaction.fromJson(json);
@@ -97,11 +97,11 @@ class _$ChatMessageReactionCopyWithImpl<$Res, $Val extends ChatMessageReaction>
 }
 
 /// @nodoc
-abstract class _$$_ChatMessageReactionCopyWith<$Res>
+abstract class _$$ChatMessageReactionImplCopyWith<$Res>
     implements $ChatMessageReactionCopyWith<$Res> {
-  factory _$$_ChatMessageReactionCopyWith(_$_ChatMessageReaction value,
-          $Res Function(_$_ChatMessageReaction) then) =
-      __$$_ChatMessageReactionCopyWithImpl<$Res>;
+  factory _$$ChatMessageReactionImplCopyWith(_$ChatMessageReactionImpl value,
+          $Res Function(_$ChatMessageReactionImpl) then) =
+      __$$ChatMessageReactionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({bool seen, ChatMessage message, String reaction, String skinTone});
@@ -111,11 +111,11 @@ abstract class _$$_ChatMessageReactionCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ChatMessageReactionCopyWithImpl<$Res>
-    extends _$ChatMessageReactionCopyWithImpl<$Res, _$_ChatMessageReaction>
-    implements _$$_ChatMessageReactionCopyWith<$Res> {
-  __$$_ChatMessageReactionCopyWithImpl(_$_ChatMessageReaction _value,
-      $Res Function(_$_ChatMessageReaction) _then)
+class __$$ChatMessageReactionImplCopyWithImpl<$Res>
+    extends _$ChatMessageReactionCopyWithImpl<$Res, _$ChatMessageReactionImpl>
+    implements _$$ChatMessageReactionImplCopyWith<$Res> {
+  __$$ChatMessageReactionImplCopyWithImpl(_$ChatMessageReactionImpl _value,
+      $Res Function(_$ChatMessageReactionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -126,7 +126,7 @@ class __$$_ChatMessageReactionCopyWithImpl<$Res>
     Object? reaction = null,
     Object? skinTone = null,
   }) {
-    return _then(_$_ChatMessageReaction(
+    return _then(_$ChatMessageReactionImpl(
       seen: null == seen
           ? _value.seen
           : seen // ignore: cast_nullable_to_non_nullable
@@ -149,15 +149,15 @@ class __$$_ChatMessageReactionCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ChatMessageReaction implements _ChatMessageReaction {
-  const _$_ChatMessageReaction(
+class _$ChatMessageReactionImpl implements _ChatMessageReaction {
+  const _$ChatMessageReactionImpl(
       {this.seen = false,
       required this.message,
       required this.reaction,
       required this.skinTone});
 
-  factory _$_ChatMessageReaction.fromJson(Map<String, dynamic> json) =>
-      _$$_ChatMessageReactionFromJson(json);
+  factory _$ChatMessageReactionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChatMessageReactionImplFromJson(json);
 
   @override
   @JsonKey()
@@ -182,10 +182,10 @@ class _$_ChatMessageReaction implements _ChatMessageReaction {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ChatMessageReaction &&
+            other is _$ChatMessageReactionImpl &&
             (identical(other.seen, seen) || other.seen == seen) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.reaction, reaction) ||
@@ -202,13 +202,13 @@ class _$_ChatMessageReaction implements _ChatMessageReaction {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ChatMessageReactionCopyWith<_$_ChatMessageReaction> get copyWith =>
-      __$$_ChatMessageReactionCopyWithImpl<_$_ChatMessageReaction>(
+  _$$ChatMessageReactionImplCopyWith<_$ChatMessageReactionImpl> get copyWith =>
+      __$$ChatMessageReactionImplCopyWithImpl<_$ChatMessageReactionImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ChatMessageReactionToJson(
+    return _$$ChatMessageReactionImplToJson(
       this,
     );
   }
@@ -219,10 +219,10 @@ abstract class _ChatMessageReaction implements ChatMessageReaction {
       {final bool seen,
       required final ChatMessage message,
       required final String reaction,
-      required final String skinTone}) = _$_ChatMessageReaction;
+      required final String skinTone}) = _$ChatMessageReactionImpl;
 
   factory _ChatMessageReaction.fromJson(Map<String, dynamic> json) =
-      _$_ChatMessageReaction.fromJson;
+      _$ChatMessageReactionImpl.fromJson;
 
   @override
   bool get seen;
@@ -241,7 +241,7 @@ abstract class _ChatMessageReaction implements ChatMessageReaction {
   String get skinTone;
   @override
   @JsonKey(ignore: true)
-  _$$_ChatMessageReactionCopyWith<_$_ChatMessageReaction> get copyWith =>
+  _$$ChatMessageReactionImplCopyWith<_$ChatMessageReactionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -277,17 +277,15 @@ abstract class $ChatMessageCopyWith<$Res> {
       _$ChatMessageCopyWithImpl<$Res, ChatMessage>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'fromId')
-          ParticipantId? fromParticipantId,
-      @JsonKey(name: 'name')
-          String? fromParticipantName,
+      {@JsonKey(name: 'fromId') ParticipantId? fromParticipantId,
+      @JsonKey(name: 'name') String? fromParticipantName,
       DateTime date,
       DateTime? received,
       String message,
       String? room,
       bool local,
       @JsonKey(fromJson: reactionsFromJson, ignore: true)
-          Map<String, Set<ParticipantId>> reactions});
+      Map<String, Set<ParticipantId>> reactions});
 
   $ParticipantIdCopyWith<$Res>? get fromParticipantId;
 }
@@ -364,36 +362,34 @@ class _$ChatMessageCopyWithImpl<$Res, $Val extends ChatMessage>
 }
 
 /// @nodoc
-abstract class _$$_ChatMessageCopyWith<$Res>
+abstract class _$$ChatMessageImplCopyWith<$Res>
     implements $ChatMessageCopyWith<$Res> {
-  factory _$$_ChatMessageCopyWith(
-          _$_ChatMessage value, $Res Function(_$_ChatMessage) then) =
-      __$$_ChatMessageCopyWithImpl<$Res>;
+  factory _$$ChatMessageImplCopyWith(
+          _$ChatMessageImpl value, $Res Function(_$ChatMessageImpl) then) =
+      __$$ChatMessageImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'fromId')
-          ParticipantId? fromParticipantId,
-      @JsonKey(name: 'name')
-          String? fromParticipantName,
+      {@JsonKey(name: 'fromId') ParticipantId? fromParticipantId,
+      @JsonKey(name: 'name') String? fromParticipantName,
       DateTime date,
       DateTime? received,
       String message,
       String? room,
       bool local,
       @JsonKey(fromJson: reactionsFromJson, ignore: true)
-          Map<String, Set<ParticipantId>> reactions});
+      Map<String, Set<ParticipantId>> reactions});
 
   @override
   $ParticipantIdCopyWith<$Res>? get fromParticipantId;
 }
 
 /// @nodoc
-class __$$_ChatMessageCopyWithImpl<$Res>
-    extends _$ChatMessageCopyWithImpl<$Res, _$_ChatMessage>
-    implements _$$_ChatMessageCopyWith<$Res> {
-  __$$_ChatMessageCopyWithImpl(
-      _$_ChatMessage _value, $Res Function(_$_ChatMessage) _then)
+class __$$ChatMessageImplCopyWithImpl<$Res>
+    extends _$ChatMessageCopyWithImpl<$Res, _$ChatMessageImpl>
+    implements _$$ChatMessageImplCopyWith<$Res> {
+  __$$ChatMessageImplCopyWithImpl(
+      _$ChatMessageImpl _value, $Res Function(_$ChatMessageImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -408,7 +404,7 @@ class __$$_ChatMessageCopyWithImpl<$Res>
     Object? local = null,
     Object? reactions = null,
   }) {
-    return _then(_$_ChatMessage(
+    return _then(_$ChatMessageImpl(
       fromParticipantId: freezed == fromParticipantId
           ? _value.fromParticipantId
           : fromParticipantId // ignore: cast_nullable_to_non_nullable
@@ -447,24 +443,22 @@ class __$$_ChatMessageCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ChatMessage extends _ChatMessage {
-  const _$_ChatMessage(
-      {@JsonKey(name: 'fromId')
-          this.fromParticipantId,
-      @JsonKey(name: 'name')
-          this.fromParticipantName,
+class _$ChatMessageImpl extends _ChatMessage {
+  const _$ChatMessageImpl(
+      {@JsonKey(name: 'fromId') this.fromParticipantId,
+      @JsonKey(name: 'name') this.fromParticipantName,
       required this.date,
       this.received,
       required this.message,
       this.room,
       this.local = false,
       @JsonKey(fromJson: reactionsFromJson, ignore: true)
-          final Map<String, Set<ParticipantId>> reactions = const {}})
+      final Map<String, Set<ParticipantId>> reactions = const {}})
       : _reactions = reactions,
         super._();
 
-  factory _$_ChatMessage.fromJson(Map<String, dynamic> json) =>
-      _$$_ChatMessageFromJson(json);
+  factory _$ChatMessageImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChatMessageImplFromJson(json);
 
   @override
   @JsonKey(name: 'fromId')
@@ -498,10 +492,10 @@ class _$_ChatMessage extends _ChatMessage {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ChatMessage &&
+            other is _$ChatMessageImpl &&
             (identical(other.fromParticipantId, fromParticipantId) ||
                 other.fromParticipantId == fromParticipantId) &&
             (identical(other.fromParticipantName, fromParticipantName) ||
@@ -532,12 +526,12 @@ class _$_ChatMessage extends _ChatMessage {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ChatMessageCopyWith<_$_ChatMessage> get copyWith =>
-      __$$_ChatMessageCopyWithImpl<_$_ChatMessage>(this, _$identity);
+  _$$ChatMessageImplCopyWith<_$ChatMessageImpl> get copyWith =>
+      __$$ChatMessageImplCopyWithImpl<_$ChatMessageImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ChatMessageToJson(
+    return _$$ChatMessageImplToJson(
       this,
     );
   }
@@ -545,21 +539,19 @@ class _$_ChatMessage extends _ChatMessage {
 
 abstract class _ChatMessage extends ChatMessage {
   const factory _ChatMessage(
-      {@JsonKey(name: 'fromId')
-          final ParticipantId? fromParticipantId,
-      @JsonKey(name: 'name')
-          final String? fromParticipantName,
+      {@JsonKey(name: 'fromId') final ParticipantId? fromParticipantId,
+      @JsonKey(name: 'name') final String? fromParticipantName,
       required final DateTime date,
       final DateTime? received,
       required final String message,
       final String? room,
       final bool local,
       @JsonKey(fromJson: reactionsFromJson, ignore: true)
-          final Map<String, Set<ParticipantId>> reactions}) = _$_ChatMessage;
+      final Map<String, Set<ParticipantId>> reactions}) = _$ChatMessageImpl;
   const _ChatMessage._() : super._();
 
   factory _ChatMessage.fromJson(Map<String, dynamic> json) =
-      _$_ChatMessage.fromJson;
+      _$ChatMessageImpl.fromJson;
 
   @override
   @JsonKey(name: 'fromId')
@@ -582,6 +574,6 @@ abstract class _ChatMessage extends ChatMessage {
   Map<String, Set<ParticipantId>> get reactions;
   @override
   @JsonKey(ignore: true)
-  _$$_ChatMessageCopyWith<_$_ChatMessage> get copyWith =>
+  _$$ChatMessageImplCopyWith<_$ChatMessageImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

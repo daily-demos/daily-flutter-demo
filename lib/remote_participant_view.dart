@@ -31,7 +31,6 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
   @override
   void didUpdateWidget(RemoteParticipantView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.setTrack(widget.client.participants.all[widget.participantId]?.media?.camera.track);
     _maybeUpdate(widget.client.participants.remote[widget.participantId]);
   }
 
@@ -54,6 +53,9 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
           if (participant.id == widget.participantId) {
             _maybeUpdate(participant);
           }
+          if (participant.info.isLocal) {
+            setState(() {}); // local canAdmin permission might've changed
+          }
         },
       );
     });
@@ -64,8 +66,13 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
         _username = username == null || username.isEmpty ? 'Guest' : username;
         _isMicMuted = participant?.isMicrophoneMuted ?? false;
         _isCameraMuted = participant?.isCameraMuted ?? false;
-        _controller.setTrack(participant?.media?.camera.track);
+        _updateVideoTrack(participant);
       });
+
+  void _updateVideoTrack(Participant? participant) {
+    final ParticipantMedia? media = participant?.media;
+    _controller.setTrack(media?.screenVideo.track ?? media?.camera.track);
+  }
 
   @override
   void dispose() {
@@ -76,12 +83,30 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
 
   @override
   Widget build(BuildContext context) {
-    late final permissions = widget.client.participants.all[widget.participantId]?.info.permissions;
-    late final canSend = permissions?.canSend;
+    final participants = widget.client.participants;
+    final participant = participants.all[widget.participantId];
 
-    late final canSendMic = canSend?.contains(CanSendPermission.microphone) ?? true;
-    late final canSendCamera = canSend?.contains(CanSendPermission.camera) ?? true;
-    late final hasPresence = permissions?.hasPresence ?? true;
+    final permissions = participant?.info.permissions;
+    final canSend = permissions?.canSend;
+    final canAdmin = permissions?.canAdmin;
+
+    final canSendMic = canSend?.contains(CanSendPermission.microphone) ?? true;
+    final canSendCamera = canSend?.contains(CanSendPermission.camera) ?? true;
+
+    final hasPresence = permissions?.hasPresence ?? true;
+    final canAdminLiveStreams = canAdmin?.contains(CanAdminPermission.streaming) ?? false;
+
+    final localPermissions = participants.local.info.permissions;
+    final localIsParticipantAdmin = localPermissions?.canAdmin.contains(CanAdminPermission.participants) ?? false;
+    final localIsOwner = participants.local.info.isOwner;
+
+    final isScreenSharing = participant?.media?.screenVideo.track != null;
+    final videoFit = isScreenSharing ? VideoViewFit.contain : VideoViewFit.cover;
+
+    final isMicrophoneOn = participant?.media?.microphone.state != MediaState.off;
+    final isCameraOn = participant?.media?.camera.state != MediaState.off;
+    final isScreenShareOn = participant?.media?.screenVideo.state != MediaState.off;
+
     return Stack(
       children: [
         Container(
@@ -94,7 +119,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
           height: widget.size.height,
           child: _isCameraMuted
               ? const Center(child: Icon(Icons.videocam_off, color: Colors.white))
-              : VideoView(controller: _controller, fit: VideoViewFit.cover),
+              : VideoView(controller: _controller, fit: videoFit),
         ),
         Positioned(
           left: 0,
@@ -122,7 +147,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
             ),
           ),
         ),
-        if (widget.client.participants.local.info.isOwner)
+        if (localIsParticipantAdmin)
           Positioned(
             right: 0,
             top: 0,
@@ -144,14 +169,14 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
                   value: () => _setParticipantCanSendMic(!canSendMic),
                   child: ListTile(
                     leading: Icon(canSendMic ? Icons.mic_off : Icons.mic),
-                    title: Text(canSendMic ? 'Mute' : 'Unmute'),
+                    title: Text(canSendMic ? 'Revoke mic' : 'Allow mic'),
                   ),
                 ),
                 PopupMenuItem(
-                  value: () => _setParticipantCanSendCamera(!canSendMic),
+                  value: () => _setParticipantCanSendCamera(!canSendCamera),
                   child: ListTile(
                     leading: Icon(canSendCamera ? Icons.videocam_off : Icons.videocam),
-                    title: Text(canSendCamera ? 'Turn off video' : 'Turn on video'),
+                    title: Text(canSendCamera ? 'Revoke cam' : 'Allow cam'),
                   ),
                 ),
                 PopupMenuItem(
@@ -160,7 +185,54 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
                     leading: Icon(hasPresence ? Icons.hide_image : Icons.image),
                     title: Text(hasPresence ? 'Hide' : 'Show'),
                   ),
-                )
+                ),
+                PopupMenuItem(
+                  value: () => _setParticipantCanAdminLiveStreams(!canAdminLiveStreams),
+                  child: ListTile(
+                    leading: Icon(canAdminLiveStreams ? Icons.tv_off : Icons.live_tv),
+                    title: Text(canAdminLiveStreams ? 'Demote live stream admin' : 'Make live stream admin'),
+                  ),
+                ),
+                if (isMicrophoneOn)
+                  PopupMenuItem(
+                    value: () => _setParticipantMicrophoneEnabled(false),
+                    child: const ListTile(
+                      leading: Icon(Icons.mic_off),
+                      title: Text('Mic off'),
+                    ),
+                  ),
+                if (!isMicrophoneOn && localIsOwner)
+                  PopupMenuItem(
+                    value: () => _setParticipantMicrophoneEnabled(true),
+                    child: const ListTile(
+                      leading: Icon(Icons.mic),
+                      title: Text('Mic on'),
+                    ),
+                  ),
+                if (isCameraOn)
+                  PopupMenuItem(
+                    value: () => _setParticipantCameraEnabled(false),
+                    child: const ListTile(
+                      leading: Icon(Icons.mic_off),
+                      title: Text('Cam off'),
+                    ),
+                  ),
+                if (isScreenShareOn)
+                  PopupMenuItem(
+                    value: _disableParticipantScreenShare,
+                    child: const ListTile(
+                      leading: Icon(Icons.mic_off),
+                      title: Text('Screen share off'),
+                    ),
+                  ),
+                if (!isCameraOn && localIsOwner)
+                  PopupMenuItem(
+                    value: () => _setParticipantCameraEnabled(true),
+                    child: const ListTile(
+                      leading: Icon(Icons.mic),
+                      title: Text('Cam on'),
+                    ),
+                  ),
               ],
               onSelected: (f) => f(),
             ),
@@ -230,6 +302,61 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
               hasPresence: BoolUpdate.set(hasPresence),
             ),
           ),
+        },
+      ),
+    );
+  }
+
+  void _setParticipantCanAdminLiveStreams(bool canAdminLiveStreams) {
+    final Set<CanAdminPermission> permissions = {
+      ...widget.client.participants.all[widget.participantId]?.info.permissions?.canAdmin ?? {}
+    };
+    if (canAdminLiveStreams) {
+      permissions.add(CanAdminPermission.streaming);
+    } else {
+      permissions.remove(CanAdminPermission.streaming);
+    }
+    widget.client.updateRemoteParticipants(
+      updates: RemoteParticipantSettingsUpdatesById.set(
+        updates: {
+          widget.participantId: RemoteParticipantUpdate.set(
+            permissions: ParticipantPermissionsUpdate.set(
+              canAdmin: SetUpdate<CanAdminPermission>.set(permissions),
+            ),
+          ),
+        },
+      ),
+    );
+  }
+
+  void _setParticipantMicrophoneEnabled(bool enabled) {
+    widget.client.updateRemoteParticipants(
+      updates: RemoteParticipantSettingsUpdatesById.set(
+        updates: {
+          widget.participantId:
+              RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(microphone: enabled))
+        },
+      ),
+    );
+  }
+
+  void _setParticipantCameraEnabled(bool enabled) {
+    widget.client.updateRemoteParticipants(
+      updates: RemoteParticipantSettingsUpdatesById.set(
+        updates: {
+          widget.participantId:
+              RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(camera: enabled))
+        },
+      ),
+    );
+  }
+
+  void _disableParticipantScreenShare() {
+    widget.client.updateRemoteParticipants(
+      updates: RemoteParticipantSettingsUpdatesById.set(
+        updates: {
+          widget.participantId:
+              const RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(screenShare: false))
         },
       ),
     );

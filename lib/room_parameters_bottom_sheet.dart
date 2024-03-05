@@ -2,7 +2,11 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 Future<RoomParameters?> showRoomParametersBottomSheet(BuildContext context, Iterable<Uri> roomUrls, String? token) =>
-    showModalBottomSheet(context: context, builder: (_) => RoomParametersBottomSheet(roomUrls: roomUrls, token: token));
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (_) => RoomParametersBottomSheet(roomUrls: roomUrls, token: token),
+    );
 
 class RoomParameters {
   RoomParameters(this.roomUrl, this.token);
@@ -81,6 +85,7 @@ class _RoomParametersBottomSheetState extends State<RoomParametersBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      maintainBottomViewPadding: true,
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(20, 8, 20, MediaQuery.of(context).viewInsets.bottom),

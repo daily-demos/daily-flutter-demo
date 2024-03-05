@@ -6,17 +6,17 @@ part of 'chat_message.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ChatMessageReaction _$$_ChatMessageReactionFromJson(
+_$ChatMessageReactionImpl _$$ChatMessageReactionImplFromJson(
         Map<String, dynamic> json) =>
-    _$_ChatMessageReaction(
+    _$ChatMessageReactionImpl(
       seen: json['seen'] as bool? ?? false,
       message: ChatMessage.fromJson(json['message'] as Map<String, dynamic>),
       reaction: json['reaction'] as String,
       skinTone: json['skinTone'] as String,
     );
 
-Map<String, dynamic> _$$_ChatMessageReactionToJson(
-        _$_ChatMessageReaction instance) =>
+Map<String, dynamic> _$$ChatMessageReactionImplToJson(
+        _$ChatMessageReactionImpl instance) =>
     <String, dynamic>{
       'seen': instance.seen,
       'message': instance.message,
@@ -24,8 +24,8 @@ Map<String, dynamic> _$$_ChatMessageReactionToJson(
       'skinTone': instance.skinTone,
     };
 
-_$_ChatMessage _$$_ChatMessageFromJson(Map<String, dynamic> json) =>
-    _$_ChatMessage(
+_$ChatMessageImpl _$$ChatMessageImplFromJson(Map<String, dynamic> json) =>
+    _$ChatMessageImpl(
       fromParticipantId: json['fromId'] == null
           ? null
           : ParticipantId.fromJson(json['fromId'] as String),
@@ -39,7 +39,7 @@ _$_ChatMessage _$$_ChatMessageFromJson(Map<String, dynamic> json) =>
       local: json['local'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$$_ChatMessageToJson(_$_ChatMessage instance) =>
+Map<String, dynamic> _$$ChatMessageImplToJson(_$ChatMessageImpl instance) =>
     <String, dynamic>{
       'fromId': instance.fromParticipantId,
       'name': instance.fromParticipantName,
