@@ -1,6 +1,11 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  exclude:
+    - lib/*.freezed.dart
+    - lib/*.g.dart
   errors:
     missing_required_param: error
     missing_return: error
+    # allow having TODOs in the code
+    todo: ignore
