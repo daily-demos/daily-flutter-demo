@@ -75,9 +75,9 @@ class _UserSettingsBottomSheetState extends State<UserSettingsBottomSheet> {
                   ElevatedButton(
                     onPressed: _canSave ? () => Navigator.of(context).pop(_name) : null,
                     child: const Text('Save'),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

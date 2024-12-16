@@ -18,7 +18,7 @@ import 'package:daily_flutter_demo/remote_participant_view.dart';
 import 'package:daily_flutter_demo/room_settings_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           final callState = callStateData.state;
           callStateData.whenOrNull(
-            joining: () => unawaited(Wakelock.toggle(enable: true)),
+            joining: () => unawaited(WakelockPlus.toggle(enable: true)),
             joined: (config) {
               final initialUsername = config.initialUserName;
               if (initialUsername != null && initialUsername.isNotEmpty) {
@@ -112,7 +112,7 @@ class _MyAppState extends State<MyApp> {
               _messageNotifier.value = [];
               // The camera and mic are automatically disabled after a call, set them back to what they were.
               widget.callClient.setInputsEnabled(camera: _wasCameraEnabled, microphone: _wasMicrophoneEnabled);
-              unawaited(Wakelock.toggle(enable: false));
+              unawaited(WakelockPlus.toggle(enable: false));
             },
           );
           _hasActiveCall = callState == CallState.joining || callState == CallState.joined;
@@ -287,7 +287,7 @@ class _MyAppState extends State<MyApp> {
                                 ),
                               ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -308,7 +308,7 @@ class _MyAppState extends State<MyApp> {
                 Row(children: [LocalParticipantView(client: widget.callClient, prefs: widget.prefs)]),
                 if (widget.callClient.callState == CallState.joined && focusedParticipantId == null) ...[
                   const SizedBox(height: 80),
-                  const Center(child: Text("There's no one else in this call"))
+                  const Center(child: Text("There's no one else in this call")),
                 ],
                 if (focusedParticipantId != null)
                   Padding(
@@ -361,7 +361,7 @@ class _MyAppState extends State<MyApp> {
                                 ),
                               );
                             },
-                          )
+                          ),
                       ],
                     ),
                   ),
