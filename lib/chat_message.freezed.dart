@@ -32,8 +32,12 @@ mixin _$ChatMessageReaction {
   String get reaction => throw _privateConstructorUsedError;
   String get skinTone => throw _privateConstructorUsedError;
 
+  /// Serializes this ChatMessageReaction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ChatMessageReaction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ChatMessageReactionCopyWith<ChatMessageReaction> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -59,6 +63,8 @@ class _$ChatMessageReactionCopyWithImpl<$Res, $Val extends ChatMessageReaction>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ChatMessageReaction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -87,6 +93,8 @@ class _$ChatMessageReactionCopyWithImpl<$Res, $Val extends ChatMessageReaction>
     ) as $Val);
   }
 
+  /// Create a copy of ChatMessageReaction
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ChatMessageCopyWith<$Res> get message {
@@ -118,6 +126,8 @@ class __$$ChatMessageReactionImplCopyWithImpl<$Res>
       $Res Function(_$ChatMessageReactionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ChatMessageReaction
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -194,12 +204,14 @@ class _$ChatMessageReactionImpl implements _ChatMessageReaction {
                 other.skinTone == skinTone));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, seen, message, reaction, skinTone);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChatMessageReaction
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ChatMessageReactionImplCopyWith<_$ChatMessageReactionImpl> get copyWith =>
@@ -226,21 +238,24 @@ abstract class _ChatMessageReaction implements ChatMessageReaction {
 
   @override
   bool get seen;
-  @override
 
   /// The chat message as it looked BEFORE the reaction was added or removed.
   ///
   /// Ie. if the message's reaction map entry for [reaction] contains [fromParticipantId], then that was the state
   /// before this action happened and the user clicked to REMOVE [reaction].
-  ChatMessage get message;
   @override
+  ChatMessage get message;
 
   /// The reaction
+  @override
   String get reaction;
   @override
   String get skinTone;
+
+  /// Create a copy of ChatMessageReaction
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChatMessageReactionImplCopyWith<_$ChatMessageReactionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -260,12 +275,16 @@ mixin _$ChatMessage {
   String get message => throw _privateConstructorUsedError;
   String? get room => throw _privateConstructorUsedError;
   bool get local => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: reactionsFromJson, ignore: true)
+  @JsonKey(fromJson: reactionsFromJson, includeFromJson: false)
   Map<String, Set<ParticipantId>> get reactions =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this ChatMessage to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ChatMessageCopyWith<ChatMessage> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -284,7 +303,7 @@ abstract class $ChatMessageCopyWith<$Res> {
       String message,
       String? room,
       bool local,
-      @JsonKey(fromJson: reactionsFromJson, ignore: true)
+      @JsonKey(fromJson: reactionsFromJson, includeFromJson: false)
       Map<String, Set<ParticipantId>> reactions});
 
   $ParticipantIdCopyWith<$Res>? get fromParticipantId;
@@ -300,6 +319,8 @@ class _$ChatMessageCopyWithImpl<$Res, $Val extends ChatMessage>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ChatMessage
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -348,6 +369,8 @@ class _$ChatMessageCopyWithImpl<$Res, $Val extends ChatMessage>
     ) as $Val);
   }
 
+  /// Create a copy of ChatMessage
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ParticipantIdCopyWith<$Res>? get fromParticipantId {
@@ -377,7 +400,7 @@ abstract class _$$ChatMessageImplCopyWith<$Res>
       String message,
       String? room,
       bool local,
-      @JsonKey(fromJson: reactionsFromJson, ignore: true)
+      @JsonKey(fromJson: reactionsFromJson, includeFromJson: false)
       Map<String, Set<ParticipantId>> reactions});
 
   @override
@@ -392,6 +415,8 @@ class __$$ChatMessageImplCopyWithImpl<$Res>
       _$ChatMessageImpl _value, $Res Function(_$ChatMessageImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ChatMessage
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -452,7 +477,7 @@ class _$ChatMessageImpl extends _ChatMessage {
       required this.message,
       this.room,
       this.local = false,
-      @JsonKey(fromJson: reactionsFromJson, ignore: true)
+      @JsonKey(fromJson: reactionsFromJson, includeFromJson: false)
       final Map<String, Set<ParticipantId>> reactions = const {}})
       : _reactions = reactions,
         super._();
@@ -479,7 +504,7 @@ class _$ChatMessageImpl extends _ChatMessage {
   final bool local;
   final Map<String, Set<ParticipantId>> _reactions;
   @override
-  @JsonKey(fromJson: reactionsFromJson, ignore: true)
+  @JsonKey(fromJson: reactionsFromJson, includeFromJson: false)
   Map<String, Set<ParticipantId>> get reactions {
     if (_reactions is EqualUnmodifiableMapView) return _reactions;
     // ignore: implicit_dynamic_type
@@ -510,7 +535,7 @@ class _$ChatMessageImpl extends _ChatMessage {
                 .equals(other._reactions, _reactions));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -523,7 +548,9 @@ class _$ChatMessageImpl extends _ChatMessage {
       local,
       const DeepCollectionEquality().hash(_reactions));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChatMessage
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ChatMessageImplCopyWith<_$ChatMessageImpl> get copyWith =>
@@ -546,7 +573,7 @@ abstract class _ChatMessage extends ChatMessage {
       required final String message,
       final String? room,
       final bool local,
-      @JsonKey(fromJson: reactionsFromJson, ignore: true)
+      @JsonKey(fromJson: reactionsFromJson, includeFromJson: false)
       final Map<String, Set<ParticipantId>> reactions}) = _$ChatMessageImpl;
   const _ChatMessage._() : super._();
 
@@ -570,10 +597,13 @@ abstract class _ChatMessage extends ChatMessage {
   @override
   bool get local;
   @override
-  @JsonKey(fromJson: reactionsFromJson, ignore: true)
+  @JsonKey(fromJson: reactionsFromJson, includeFromJson: false)
   Map<String, Set<ParticipantId>> get reactions;
+
+  /// Create a copy of ChatMessage
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChatMessageImplCopyWith<_$ChatMessageImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

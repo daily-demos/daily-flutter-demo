@@ -47,7 +47,9 @@ class ChatMessage with _$ChatMessage {
     required String message,
     String? room,
     @Default(false) bool local,
-    @JsonKey(fromJson: reactionsFromJson, ignore: true) @Default({}) Map<String, Set<ParticipantId>> reactions,
+    @JsonKey(fromJson: reactionsFromJson, includeFromJson: false)
+    @Default({})
+    Map<String, Set<ParticipantId>> reactions,
   }) = _ChatMessage;
 
   const ChatMessage._();

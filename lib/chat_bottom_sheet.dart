@@ -112,6 +112,7 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () {
         unawaited(Future(widget.onClose));
@@ -166,7 +167,7 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
                             }
                           },
                     icon: const Icon(Icons.send),
-                  )
+                  ),
                 ],
               ),
             ],
@@ -224,7 +225,7 @@ class _MessageBubble extends StatelessWidget {
           left: message.local ? 0 : 24,
           bottom: 0,
           child: _Reactions(reactions: message.reactions, onReaction: onReaction),
-        )
+        ),
       ],
     );
   }
@@ -256,7 +257,7 @@ class _ReactionsState extends State<_Reactions> {
           icon: Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(Icons.add),
@@ -275,7 +276,7 @@ class _ReactionsState extends State<_Reactions> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Wrap(
@@ -303,7 +304,7 @@ class _Reaction extends StatelessWidget {
         children: [
           Text(reaction),
           const SizedBox(width: 2),
-          Text(count.toString(), style: Theme.of(context).textTheme.labelSmall)
+          Text(count.toString(), style: Theme.of(context).textTheme.labelSmall),
         ],
       );
 }
@@ -322,7 +323,7 @@ class _ReactionPicker extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

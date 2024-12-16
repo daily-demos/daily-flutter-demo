@@ -93,7 +93,7 @@ class _ChatButtonState extends State<ChatButton> {
                     ),
                   ),
                 ),
-        )
+        ),
       ],
     );
   }

@@ -93,7 +93,7 @@ class _RoomSettingsBarState extends State<RoomSettingsBar> {
                         ),
                       ],
                     ),
-                  ]
+                  ],
                 ],
               ),
             ),

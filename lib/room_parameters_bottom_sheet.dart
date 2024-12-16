@@ -140,9 +140,9 @@ class _RoomParametersBottomSheetState extends State<RoomParametersBottomSheet> {
                           }
                         : null,
                     child: const Text('Save'),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

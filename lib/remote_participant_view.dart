@@ -236,14 +236,14 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
               ],
               onSelected: (f) => f(),
             ),
-          )
+          ),
       ],
     );
   }
 
   void _setParticipantCanSendMic(bool canSend) {
     final Set<CanSendPermission> permissions = {
-      ...widget.client.participants.all[widget.participantId]?.info.permissions?.canSend ?? {}
+      ...widget.client.participants.all[widget.participantId]?.info.permissions?.canSend ?? {},
     };
     if (canSend) {
       permissions
@@ -269,7 +269,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
 
   void _setParticipantCanSendCamera(bool canSend) {
     final Set<CanSendPermission> permissions = {
-      ...widget.client.participants.all[widget.participantId]?.info.permissions?.canSend ?? {}
+      ...widget.client.participants.all[widget.participantId]?.info.permissions?.canSend ?? {},
     };
     if (canSend) {
       permissions
@@ -309,7 +309,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
 
   void _setParticipantCanAdminLiveStreams(bool canAdminLiveStreams) {
     final Set<CanAdminPermission> permissions = {
-      ...widget.client.participants.all[widget.participantId]?.info.permissions?.canAdmin ?? {}
+      ...widget.client.participants.all[widget.participantId]?.info.permissions?.canAdmin ?? {},
     };
     if (canAdminLiveStreams) {
       permissions.add(CanAdminPermission.streaming);
@@ -334,7 +334,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
           widget.participantId:
-              RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(microphone: enabled))
+              RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(microphone: enabled)),
         },
       ),
     );
@@ -345,7 +345,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
           widget.participantId:
-              RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(camera: enabled))
+              RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(camera: enabled)),
         },
       ),
     );
@@ -356,7 +356,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
           widget.participantId:
-              const RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(screenShare: false))
+              const RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(screenShare: false)),
         },
       ),
     );

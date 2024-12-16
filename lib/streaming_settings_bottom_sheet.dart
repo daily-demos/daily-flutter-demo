@@ -86,9 +86,9 @@ class _StreamingSettingsBottomSheetState extends State<StreamingSettingsBottomSh
                           }
                         : null,
                     child: const Text('Save'),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
