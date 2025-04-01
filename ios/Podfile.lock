@@ -1,8 +1,8 @@
 PODS:
-  - daily_flutter (0.29.0):
-    - DailyFlutter-iOS (= 0.29.0)
+  - daily_flutter (0.30.0):
+    - DailyFlutter-iOS (= 0.30.0)
     - Flutter
-  - DailyFlutter-iOS (0.29.0):
+  - DailyFlutter-iOS (0.30.0):
     - Flutter
   - Flutter (1.0.0)
   - package_info_plus (0.4.5):
@@ -42,8 +42,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  daily_flutter: a1c007c029cc9343a9fe4187769d560354d1fbc2
-  DailyFlutter-iOS: 23088094afc6ca678ccd6ec6b6ed86e00c38cb58
+  daily_flutter: d0bcadb6e4c8f4bdafddc1d343bca30f47206f85
+  DailyFlutter-iOS: 21611a46811ad697732f24ddf1c3817b46181dc2
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
