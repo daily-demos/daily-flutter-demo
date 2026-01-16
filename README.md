@@ -40,6 +40,13 @@ a token is always required when joining a private room.
 2. Open the `daily-flutter-demo`-directory in your favourite Flutter IDE/editor.
 3. Run `flutter pub get`
 4. Run the project with `flutter run`.
+
+> **📱 iOS 26 Device Note:** When running on physical iOS 26 devices, use release mode to avoid crashes:
+> ```bash
+   > flutter run --release
+   > ```
+> See [this issue](https://stackoverflow.com/questions/79829563/flutter-app-crashes-on-ios-26-physical-device-with-mprotect-failed-permission) for technical details.
+
 5. Connect to the room URL you are testing and, to see it work, connect again either in another simulator or device,
    or directly using a web browser.
 
