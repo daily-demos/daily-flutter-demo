@@ -10,7 +10,7 @@ publish_to: none
 dependencies:
   collection: ^1.18.0
   cupertino_icons: ^1.0.8
-  daily_flutter: ^0.34.0
+  daily_flutter: ^0.37.0
   flutter:
     sdk: flutter
   freezed_annotation: ^2.4.1
