@@ -173,10 +173,10 @@ packages:
     dependency: "direct main"
     description:
       name: daily_flutter
-      sha256: "10d893bbf640ea8ad62b6e6ee8bb79ee6a2590821f4f54c6682198af15935250"
+      sha256: "7d76cd898de1fdef2584da756ea273da59473e513c656ccee31c19b0f3e26367"
       url: "https://pub.dev"
     source: hosted
-    version: "0.38.0"
+    version: "0.39.0"
   dart_style:
     dependency: transitive
     description:
