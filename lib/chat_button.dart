@@ -82,10 +82,7 @@ class _ChatButtonState extends State<ChatButton> {
               : Container(
                   width: size,
                   height: size,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(size / 2),
-                  ),
+                  decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(size / 2)),
                   child: Center(
                     child: Text(
                       _newMessages > 99 ? '99+' : _newMessages.toString(),

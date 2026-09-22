@@ -54,7 +54,7 @@ class _RecordingButtonState extends State<RecordingButton> {
           });
           _showSnackBar('Recording stopped');
         },
-        recordingError: (_, __) {
+        recordingError: (_, _) {
           setState(() {
             _isStreamingOrRecording = false;
             _isInStreamingMode = false;
@@ -75,7 +75,7 @@ class _RecordingButtonState extends State<RecordingButton> {
           });
           _showSnackBar('Live streaming stopped');
         },
-        liveStreamError: (_, __) {
+        liveStreamError: (_, _) {
           setState(() {
             _isStreamingOrRecording = false;
             _isInStreamingMode = true;
@@ -88,65 +88,61 @@ class _RecordingButtonState extends State<RecordingButton> {
 
   @override
   Widget build(BuildContext context) => AnimatedSwitcher(
-        duration: kThemeAnimationDuration,
-        transitionBuilder: (child, animation) => SizeTransition(
-          axisAlignment: -1,
-          sizeFactor: animation,
-          axis: Axis.horizontal,
-          child: child,
-        ),
-        child: widget.client.callState != CallState.joined
-            ? const SizedBox()
-            : Padding(
-                padding: const EdgeInsetsDirectional.only(end: 4),
-                child: GestureDetector(
-                  onLongPress: _isStreamingOrRecording
-                      ? null
-                      : () {
-                          setState(() => _isInStreamingMode = !_isInStreamingMode);
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${_isInStreamingMode ? 'Live streaming' : 'Recording'} mode')),
-                          );
-                        },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).shadowColor.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(12),
+    duration: kThemeAnimationDuration,
+    transitionBuilder: (child, animation) =>
+        SizeTransition(alignment: Alignment.centerLeft, sizeFactor: animation, axis: Axis.horizontal, child: child),
+    child: widget.client.callState != CallState.joined
+        ? const SizedBox()
+        : Padding(
+            padding: const EdgeInsetsDirectional.only(end: 4),
+            child: GestureDetector(
+              onLongPress: _isStreamingOrRecording
+                  ? null
+                  : () {
+                      setState(() => _isInStreamingMode = !_isInStreamingMode);
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${_isInStreamingMode ? 'Live streaming' : 'Recording'} mode')),
+                      );
+                    },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).shadowColor.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      onPressed: _onPressed,
+                      icon: AnimatedSwitcher(
+                        duration: kThemeAnimationDuration,
+                        child: _isStreamingOrRecording
+                            ? const Icon(Icons.stop)
+                            : _isInStreamingMode
+                            ? Transform.translate(
+                                offset: const Offset(0, 4),
+                                child: Stack(
+                                  children: [
+                                    Transform.translate(
+                                      offset: const Offset(0, -10),
+                                      child: const Icon(Icons.wifi, color: Colors.red),
+                                    ),
+                                    const Icon(Icons.fiber_manual_record, color: Colors.red),
+                                  ],
+                                ),
+                              )
+                            : const Icon(Icons.fiber_manual_record, color: Colors.red),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          visualDensity: VisualDensity.compact,
-                          onPressed: _onPressed,
-                          icon: AnimatedSwitcher(
-                            duration: kThemeAnimationDuration,
-                            child: _isStreamingOrRecording
-                                ? const Icon(Icons.stop)
-                                : _isInStreamingMode
-                                    ? Transform.translate(
-                                        offset: const Offset(0, 4),
-                                        child: Stack(
-                                          children: [
-                                            Transform.translate(
-                                              offset: const Offset(0, -10),
-                                              child: const Icon(Icons.wifi, color: Colors.red),
-                                            ),
-                                            const Icon(Icons.fiber_manual_record, color: Colors.red),
-                                          ],
-                                        ),
-                                      )
-                                    : const Icon(Icons.fiber_manual_record, color: Colors.red),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
               ),
-      );
+            ),
+          ),
+  );
 
   Future<void> _onPressed() async {
     if (_isStreamingOrRecording) {

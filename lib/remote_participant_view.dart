@@ -62,12 +62,12 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
   }
 
   void _maybeUpdate(Participant? participant) => setState(() {
-        final username = participant?.info.username;
-        _username = username == null || username.isEmpty ? 'Guest' : username;
-        _isMicMuted = participant?.isMicrophoneMuted ?? false;
-        _isCameraMuted = participant?.isCameraMuted ?? false;
-        _updateVideoTrack(participant);
-      });
+    final username = participant?.info.username;
+    _username = username == null || username.isEmpty ? 'Guest' : username;
+    _isMicMuted = participant?.isMicrophoneMuted ?? false;
+    _isCameraMuted = participant?.isCameraMuted ?? false;
+    _updateVideoTrack(participant);
+  });
 
   void _updateVideoTrack(Participant? participant) {
     final ParticipantMedia? media = participant?.media;
@@ -110,10 +110,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
     return Stack(
       children: [
         Container(
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(8),
-          ),
+          decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(8)),
           clipBehavior: Clip.hardEdge,
           width: widget.size.width,
           height: widget.size.height,
@@ -127,7 +124,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
           child: Container(
             height: 24,
             decoration: BoxDecoration(
-              color: Colors.black87.withOpacity(.5),
+              color: Colors.black87.withValues(alpha: .5),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Padding(
@@ -137,10 +134,8 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
                   if (_isMicMuted) ...const [Icon(Icons.mic_off, color: Colors.grey, size: 16), SizedBox(width: 4)],
                   Text(
                     _username,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: Colors.grey, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -156,7 +151,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
                 offset: const Offset(8, -8),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black87.withOpacity(.5),
+                    color: Colors.black87.withValues(alpha: .5),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.all(4),
@@ -196,42 +191,27 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
                 if (isMicrophoneOn)
                   PopupMenuItem(
                     value: () => _setParticipantMicrophoneEnabled(false),
-                    child: const ListTile(
-                      leading: Icon(Icons.mic_off),
-                      title: Text('Mic off'),
-                    ),
+                    child: const ListTile(leading: Icon(Icons.mic_off), title: Text('Mic off')),
                   ),
                 if (!isMicrophoneOn && localIsOwner)
                   PopupMenuItem(
                     value: () => _setParticipantMicrophoneEnabled(true),
-                    child: const ListTile(
-                      leading: Icon(Icons.mic),
-                      title: Text('Mic on'),
-                    ),
+                    child: const ListTile(leading: Icon(Icons.mic), title: Text('Mic on')),
                   ),
                 if (isCameraOn)
                   PopupMenuItem(
                     value: () => _setParticipantCameraEnabled(false),
-                    child: const ListTile(
-                      leading: Icon(Icons.mic_off),
-                      title: Text('Cam off'),
-                    ),
+                    child: const ListTile(leading: Icon(Icons.mic_off), title: Text('Cam off')),
                   ),
                 if (isScreenShareOn)
                   PopupMenuItem(
                     value: _disableParticipantScreenShare,
-                    child: const ListTile(
-                      leading: Icon(Icons.mic_off),
-                      title: Text('Screen share off'),
-                    ),
+                    child: const ListTile(leading: Icon(Icons.mic_off), title: Text('Screen share off')),
                   ),
                 if (!isCameraOn && localIsOwner)
                   PopupMenuItem(
                     value: () => _setParticipantCameraEnabled(true),
-                    child: const ListTile(
-                      leading: Icon(Icons.mic),
-                      title: Text('Cam on'),
-                    ),
+                    child: const ListTile(leading: Icon(Icons.mic), title: Text('Cam on')),
                   ),
               ],
               onSelected: (f) => f(),
@@ -258,9 +238,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
           widget.participantId: RemoteParticipantUpdate.set(
-            permissions: ParticipantPermissionsUpdate.set(
-              canSend: SetUpdate<CanSendPermission>.set(permissions),
-            ),
+            permissions: ParticipantPermissionsUpdate.set(canSend: SetUpdate<CanSendPermission>.set(permissions)),
           ),
         },
       ),
@@ -284,9 +262,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
           widget.participantId: RemoteParticipantUpdate.set(
-            permissions: ParticipantPermissionsUpdate.set(
-              canSend: SetUpdate<CanSendPermission>.set(permissions),
-            ),
+            permissions: ParticipantPermissionsUpdate.set(canSend: SetUpdate<CanSendPermission>.set(permissions)),
           ),
         },
       ),
@@ -298,9 +274,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
           widget.participantId: RemoteParticipantUpdate.set(
-            permissions: ParticipantPermissionsUpdate.set(
-              hasPresence: BoolUpdate.set(hasPresence),
-            ),
+            permissions: ParticipantPermissionsUpdate.set(hasPresence: BoolUpdate.set(hasPresence)),
           ),
         },
       ),
@@ -320,9 +294,7 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
           widget.participantId: RemoteParticipantUpdate.set(
-            permissions: ParticipantPermissionsUpdate.set(
-              canAdmin: SetUpdate<CanAdminPermission>.set(permissions),
-            ),
+            permissions: ParticipantPermissionsUpdate.set(canAdmin: SetUpdate<CanAdminPermission>.set(permissions)),
           ),
         },
       ),
@@ -333,8 +305,9 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
     widget.client.updateRemoteParticipants(
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
-          widget.participantId:
-              RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(microphone: enabled)),
+          widget.participantId: RemoteParticipantUpdate.set(
+            inputsEnabled: RemoteInputsEnabledUpdate.set(microphone: enabled),
+          ),
         },
       ),
     );
@@ -344,8 +317,9 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
     widget.client.updateRemoteParticipants(
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
-          widget.participantId:
-              RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(camera: enabled)),
+          widget.participantId: RemoteParticipantUpdate.set(
+            inputsEnabled: RemoteInputsEnabledUpdate.set(camera: enabled),
+          ),
         },
       ),
     );
@@ -355,8 +329,9 @@ class _RemoteParticipantViewState extends State<RemoteParticipantView> {
     widget.client.updateRemoteParticipants(
       updates: RemoteParticipantSettingsUpdatesById.set(
         updates: {
-          widget.participantId:
-              const RemoteParticipantUpdate.set(inputsEnabled: RemoteInputsEnabledUpdate.set(screenShare: false)),
+          widget.participantId: const RemoteParticipantUpdate.set(
+            inputsEnabled: RemoteInputsEnabledUpdate.set(screenShare: false),
+          ),
         },
       ),
     );

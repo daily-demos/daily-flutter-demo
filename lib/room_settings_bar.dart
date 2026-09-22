@@ -42,7 +42,7 @@ class _RoomSettingsBarState extends State<RoomSettingsBar> {
               final previous = widget.prefs.getStringList('roomUrls') ?? [];
               final parameters = await showRoomParametersBottomSheet(
                 context,
-                previous.map(Uri.tryParse).whereNotNull(),
+                previous.map(Uri.tryParse).nonNulls,
                 _token,
               );
               if (parameters != null) {
@@ -58,7 +58,7 @@ class _RoomSettingsBarState extends State<RoomSettingsBar> {
       child: Container(
         padding: const EdgeInsets.only(top: 4, bottom: 4, left: 12, right: 8),
         decoration: BoxDecoration(
-          color: Theme.of(context).shadowColor.withOpacity(0.08),
+          color: Theme.of(context).shadowColor.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

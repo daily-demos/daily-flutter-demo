@@ -17,7 +17,7 @@ enum AppMessageEvent {
 }
 
 @Freezed(toJson: true)
-class AppMessage with _$AppMessage {
+sealed class AppMessage with _$AppMessage {
   const factory AppMessage.message({
     required String event,
     required ParticipantId fromParticipantId,
