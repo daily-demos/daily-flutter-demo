@@ -65,10 +65,7 @@ class _LocalParticipantViewState extends State<LocalParticipantView> {
           child: Stack(
             children: [
               Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(8)),
                 clipBehavior: Clip.hardEdge,
                 child: CallClientState.inputsOf(context).camera.isEnabled
                     // Showing the local user to themselves as if in a mirror is common practice
@@ -82,7 +79,7 @@ class _LocalParticipantViewState extends State<LocalParticipantView> {
                 alignment: AlignmentDirectional.topEnd,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black87.withOpacity(.6),
+                    color: Colors.black87.withValues(alpha: .6),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.all(4),
@@ -95,7 +92,7 @@ class _LocalParticipantViewState extends State<LocalParticipantView> {
                   height: 24,
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
-                    color: Colors.black87.withOpacity(.5),
+                    color: Colors.black87.withValues(alpha: .5),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -103,9 +100,7 @@ class _LocalParticipantViewState extends State<LocalParticipantView> {
                     children: [
                       Text(
                         username == null || username.isEmpty ? 'Guest' : username,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
+                        style: Theme.of(context).textTheme.bodySmall
                             ?.copyWith(color: Colors.grey, fontWeight: FontWeight.bold),
                       ),
                     ],

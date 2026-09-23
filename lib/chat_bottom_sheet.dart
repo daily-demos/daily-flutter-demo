@@ -11,20 +11,19 @@ void showChatBottomSheet(
   CallClient client,
   ValueNotifier<List<ChatMessage>> messageNotifier,
   VoidCallback onClose,
-  final void Function(ChatMessage) onChatMessageSent,
-  final void Function(ChatMessageReaction) onChatMessageReactionSent,
-) =>
-    showModalBottomSheet(
-      context: context,
-      constraints: BoxConstraints.loose(Size.fromHeight(MediaQuery.of(context).size.height)),
-      builder: (_) => ChatBottomSheet(
-        client: client,
-        messageNotifier: messageNotifier,
-        onClose: onClose,
-        onChatMessageSent: onChatMessageSent,
-        onChatMessageReactionSent: onChatMessageReactionSent,
-      ),
-    );
+  void Function(ChatMessage) onChatMessageSent,
+  void Function(ChatMessageReaction) onChatMessageReactionSent,
+) => showModalBottomSheet(
+  context: context,
+  constraints: BoxConstraints.loose(Size.fromHeight(MediaQuery.of(context).size.height)),
+  builder: (_) => ChatBottomSheet(
+    client: client,
+    messageNotifier: messageNotifier,
+    onClose: onClose,
+    onChatMessageSent: onChatMessageSent,
+    onChatMessageReactionSent: onChatMessageReactionSent,
+  ),
+);
 
 class ChatBottomSheet extends StatefulWidget {
   const ChatBottomSheet({
@@ -80,9 +79,7 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
       fromParticipantId: widget.client.participants.local.id,
       fromParticipantName: widget.client.participants.local.info.username ?? 'Guest',
       // The backend strips microseconds so we do the same so we can compare the timestamps later.
-      date: DateTime.fromMillisecondsSinceEpoch(
-        DateTime.now().millisecondsSinceEpoch,
-      ).toUtc(),
+      date: DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch).toUtc(),
       message: message,
       local: true,
       room: 'main-room',
@@ -94,9 +91,9 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
   }
 
   Future<ChatMessageReaction> _sendChatMessageReaction({
-    required final ChatMessage message,
-    required final String reaction,
-    final String? skinTone,
+    required ChatMessage message,
+    required String reaction,
+    String? skinTone,
   }) async {
     final chatMessageReaction = ChatMessageReaction(
       message: message,
@@ -126,10 +123,7 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
             children: [
               if (_messages.isEmpty) ...[
                 const SizedBox(height: 16),
-                Text(
-                  'No messages yet...',
-                  style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                ),
+                Text('No messages yet...', style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
                 const SizedBox(height: 8),
               ],
               Flexible(
@@ -137,7 +131,7 @@ class _ChatBottomSheetState extends State<ChatBottomSheet> {
                   shrinkWrap: true,
                   reverse: true,
                   itemCount: _messages.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (_, i) {
                     final message = _messages[_messages.length - i - 1];
                     return _MessageBubble(
@@ -191,14 +185,10 @@ class _MessageBubble extends StatelessWidget {
     return Stack(
       children: [
         Padding(
-          padding: EdgeInsets.only(
-            bottom: 20,
-            left: message.local ? 0 : 24,
-            right: message.local ? 40 : 16,
-          ),
+          padding: EdgeInsets.only(bottom: 20, left: message.local ? 0 : 24, right: message.local ? 40 : 16),
           child: Container(
             decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withOpacity(message.local ? .8 : .3),
+              color: theme.colorScheme.primary.withValues(alpha: message.local ? .8 : .3),
               borderRadius: BorderRadius.only(
                 topLeft: borderRadius,
                 topRight: borderRadius,
@@ -301,12 +291,12 @@ class _Reaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-        children: [
-          Text(reaction),
-          const SizedBox(width: 2),
-          Text(count.toString(), style: Theme.of(context).textTheme.labelSmall),
-        ],
-      );
+    children: [
+      Text(reaction),
+      const SizedBox(width: 2),
+      Text(count.toString(), style: Theme.of(context).textTheme.labelSmall),
+    ],
+  );
 }
 
 class _ReactionPicker extends StatelessWidget {
@@ -322,19 +312,13 @@ class _ReactionPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
-      ),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.circular(8)),
       child: Row(
         children: reactions
             .map(
               (reaction) => InkWell(
                 onTap: () => onReaction(reaction),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(reaction),
-                ),
+                child: Padding(padding: const EdgeInsets.all(8), child: Text(reaction)),
               ),
             )
             .toList(),

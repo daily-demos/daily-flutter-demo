@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     compileSdkVersion 35
-    ndkVersion '27.3.13750724'
+    ndkVersion '30.0.15729638'
     namespace 'co.daily.daily_demo'
 
     compileOptions {

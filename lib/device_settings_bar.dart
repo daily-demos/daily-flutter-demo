@@ -27,7 +27,7 @@ class DeviceSettingsBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 8, right: 4, top: 4, bottom: 4),
       decoration: BoxDecoration(
-        color: Theme.of(context).shadowColor.withOpacity(0.08),
+        color: Theme.of(context).shadowColor.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
       ),
       child: IntrinsicHeight(
@@ -61,10 +61,10 @@ class DeviceSettingsBar extends StatelessWidget {
                 offset: const Offset(-12, 0),
                 child: const Icon(Icons.arrow_drop_down, color: Colors.blue, size: 36),
               ),
-              itemBuilder: (_) => CallClientState.availableDevicesOf(context)
-                  .microphone
-                  .map((device) => PopupMenuItem(value: device.deviceId, child: Text(device.label)))
-                  .toList(),
+              itemBuilder: (_) =>
+                  CallClientState.availableDevicesOf(context).microphone
+                      .map((device) => PopupMenuItem(value: device.deviceId, child: Text(device.label)))
+                      .toList(),
               onSelected: (id) async {
                 final messenger = ScaffoldMessenger.of(context);
                 await client.setAudioDevice(deviceId: id);

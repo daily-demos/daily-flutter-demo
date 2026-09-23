@@ -57,14 +57,10 @@ class _MyAppState extends State<MyApp> {
       ..updateSubscriptionProfiles(
         forProfiles: {
           SubscriptionProfile.base: const MediaSubscriptionSettingsUpdate.set(
-            camera: VideoSubscriptionSettingsUpdate.set(
-              subscriptionState: SubscriptionStateUpdate.unsubscribed,
-            ),
+            camera: VideoSubscriptionSettingsUpdate.set(subscriptionState: SubscriptionStateUpdate.unsubscribed),
           ),
           SubscriptionProfile.activeRemote: const MediaSubscriptionSettingsUpdate.set(
-            camera: VideoSubscriptionSettingsUpdate.set(
-              subscriptionState: SubscriptionStateUpdate.subscribed,
-            ),
+            camera: VideoSubscriptionSettingsUpdate.set(subscriptionState: SubscriptionStateUpdate.subscribed),
           ),
         },
       )
@@ -126,7 +122,9 @@ class _MyAppState extends State<MyApp> {
         if (!_hasActiveCall ||
             participant == null ||
             participant.info.isLocal ||
-            participant.id == _participantFocusPriority.firstOrNull) return;
+            participant.id == _participantFocusPriority.firstOrNull) {
+          return;
+        }
         _activeSpeakerToSet = participant.id;
         if (_participantFocusPriority.length < 2) {
           _updateActiveSpeaker();
@@ -186,19 +184,17 @@ class _MyAppState extends State<MyApp> {
       forParticipants: {
         for (final id in _participantFocusPriority)
           id: const SubscriptionSettingsUpdate.set(
-            profile: SubscriptionProfileUpdate.set(
-              profile: SubscriptionProfile.activeRemote,
-            ),
+            profile: SubscriptionProfileUpdate.set(profile: SubscriptionProfile.activeRemote),
           ),
       },
     );
   }
 
-  void _handleAppMessage(final String data, final ParticipantId from) {
+  void _handleAppMessage(String data, ParticipantId from) {
     _handleParsedAppMessage(AppMessage.fromJson(jsonDecode(data)), from);
   }
 
-  void _handleParsedAppMessage(final AppMessage data, final ParticipantId from) {
+  void _handleParsedAppMessage(AppMessage data, ParticipantId from) {
     if (!_hasActiveCall) return;
     data.whenOrNull<void>(
       chatMessage: (message) {
@@ -252,60 +248,66 @@ class _MyAppState extends State<MyApp> {
         callClient: widget.callClient,
         child: Scaffold(
           appBar: AppBar(title: const Text('Daily demo')),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 4, bottom: 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        DeviceSettingsBar(client: widget.callClient),
-                      ],
-                    ),
-                    Container(
-                      alignment: AlignmentDirectional.centerEnd,
-                      padding: const EdgeInsetsDirectional.only(end: 20),
-                      child: AnimatedSwitcher(
-                        duration: kThemeAnimationDuration,
-                        transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
-                        child: widget.callClient.callState != CallState.joined
-                            ? const SizedBox()
-                            : ChatButton(
-                                client: widget.callClient,
-                                messageNotifier: _messageNotifier,
-                                onChatMessageSent: (chatMessage) => _handleParsedAppMessage(
-                                  AppMessage.chatMessage(message: chatMessage),
-                                  widget.callClient.participants.local.id,
-                                ),
-                                onChatMessageReactionSent: (chatMessageReaction) => _handleParsedAppMessage(
-                                  AppMessage.chatMessageReaction(reaction: chatMessageReaction),
-                                  widget.callClient.participants.local.id,
-                                ),
-                              ),
+          bottomNavigationBar: SafeArea(
+            top: false,
+            minimum: const EdgeInsets.only(left: 20, right: 20, bottom: 24),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [DeviceSettingsBar(client: widget.callClient)],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RecordingButton(client: widget.callClient, prefs: widget.prefs),
-                    Expanded(child: RoomSettingsBar(client: widget.callClient, prefs: widget.prefs)),
-                  ],
-                ),
-              ],
+                      Container(
+                        alignment: AlignmentDirectional.centerEnd,
+                        padding: const EdgeInsetsDirectional.only(end: 20),
+                        child: AnimatedSwitcher(
+                          duration: kThemeAnimationDuration,
+                          transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
+                          child: widget.callClient.callState != CallState.joined
+                              ? const SizedBox()
+                              : ChatButton(
+                                  client: widget.callClient,
+                                  messageNotifier: _messageNotifier,
+                                  onChatMessageSent: (chatMessage) => _handleParsedAppMessage(
+                                    AppMessage.chatMessage(message: chatMessage),
+                                    widget.callClient.participants.local.id,
+                                  ),
+                                  onChatMessageReactionSent: (chatMessageReaction) => _handleParsedAppMessage(
+                                    AppMessage.chatMessageReaction(reaction: chatMessageReaction),
+                                    widget.callClient.participants.local.id,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RecordingButton(client: widget.callClient, prefs: widget.prefs),
+                      Expanded(
+                        child: RoomSettingsBar(client: widget.callClient, prefs: widget.prefs),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           body: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(children: [LocalParticipantView(client: widget.callClient, prefs: widget.prefs)]),
+                Row(
+                  children: [LocalParticipantView(client: widget.callClient, prefs: widget.prefs)],
+                ),
                 if (widget.callClient.callState == CallState.joined && focusedParticipantId == null) ...[
                   const SizedBox(height: 80),
                   const Center(child: Text("There's no one else in this call")),

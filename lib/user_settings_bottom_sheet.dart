@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-Future<String?> showUserSettingsBottomSheet(BuildContext context, String? name) =>
-    showModalBottomSheet(context: context, builder: (_) => UserSettingsBottomSheet(name: name));
+Future<String?> showUserSettingsBottomSheet(BuildContext context, String? name) => showModalBottomSheet(
+  context: context,
+  builder: (_) => UserSettingsBottomSheet(name: name),
+);
 
 class UserSettingsBottomSheet extends StatefulWidget {
   const UserSettingsBottomSheet({super.key, required this.name});
@@ -68,10 +70,7 @@ class _UserSettingsBottomSheetState extends State<UserSettingsBottomSheet> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
+                  TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
                   ElevatedButton(
                     onPressed: _canSave ? () => Navigator.of(context).pop(_name) : null,
                     child: const Text('Save'),

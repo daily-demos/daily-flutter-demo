@@ -3,7 +3,10 @@ import 'package:daily_flutter/daily_flutter.dart';
 import 'package:flutter/material.dart';
 
 Future<StreamingSettings?> showStreamingSettingsBottomSheet(BuildContext context, LiveStreamEndpoints? endpoints) =>
-    showModalBottomSheet(context: context, builder: (_) => StreamingSettingsBottomSheet(endpoints: endpoints));
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => StreamingSettingsBottomSheet(endpoints: endpoints),
+    );
 
 class StreamingSettingsBottomSheet extends StatefulWidget {
   const StreamingSettingsBottomSheet({super.key, required this.endpoints});
@@ -72,10 +75,7 @@ class _StreamingSettingsBottomSheetState extends State<StreamingSettingsBottomSh
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
+                  TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
                   ElevatedButton(
                     onPressed: _canSave
                         ? () {

@@ -126,10 +126,7 @@ class _RoomParametersBottomSheetState extends State<RoomParametersBottomSheet> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
+                  TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
                   ElevatedButton(
                     onPressed: _canSave
                         ? () {

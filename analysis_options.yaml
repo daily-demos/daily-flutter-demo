@@ -4,6 +4,10 @@ analyzer:
   exclude:
     - lib/*.freezed.dart
     - lib/*.g.dart
+    - build/**
+    - android/**
+    - ios/**
+    - dist/**
   errors:
     missing_required_param: error
     missing_return: error

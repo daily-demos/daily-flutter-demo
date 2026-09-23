@@ -10,7 +10,7 @@ part 'chat_message.g.dart';
 
 /// Describes an event where a user has clicked or tapped a reaction button, whether to add or remove it.
 @freezed
-class ChatMessageReaction with _$ChatMessageReaction {
+abstract class ChatMessageReaction with _$ChatMessageReaction {
   const factory ChatMessageReaction({
     @Default(false) bool seen,
 
@@ -29,16 +29,16 @@ class ChatMessageReaction with _$ChatMessageReaction {
 }
 
 Map<String, List<ParticipantId>> reactionsFromJson(Map<String, dynamic> json) => json.map((key, value) {
-      // ignore: avoid_as
-      final participants = (value is Map ? value.values.expand((e) => e) : value) as Iterable;
-      return MapEntry(key, participants.cast<String>().map(ParticipantId.fromJson).toList());
-    });
+  // ignore: avoid_as
+  final participants = (value is Map ? value.values.expand((e) => e) : value) as Iterable;
+  return MapEntry(key, participants.cast<String>().map(ParticipantId.fromJson).toList());
+});
 
 DateTime dateTimeFromJson(String dateTimeStr) => DateTime.parse(dateTimeStr).toLocal();
 
 /// Describes a chat message from a user
 @freezed
-class ChatMessage with _$ChatMessage {
+abstract class ChatMessage with _$ChatMessage {
   const factory ChatMessage({
     @JsonKey(name: 'fromId') ParticipantId? fromParticipantId,
     @JsonKey(name: 'name') String? fromParticipantName,
