@@ -148,9 +148,10 @@ packages:
   daily_flutter:
     dependency: "direct main"
     description:
-      path: "../../../daily-x/daily-flutter"
-      relative: true
-    source: path
+      name: daily_flutter
+      sha256: f3f17ea8f18f6e0811562ef2dd5faefc39016eab0108e2beafc0d16d10db25da
+      url: "https://pub.dev"
+    source: hosted
     version: "0.40.0"
   dart_style:
     dependency: transitive
@@ -737,4 +738,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.13.0 <4.0.0"
-  flutter: ">=3.22.0"
+  flutter: ">=3.32.0"

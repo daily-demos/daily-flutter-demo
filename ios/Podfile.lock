@@ -1,5 +1,8 @@
 PODS:
-  - daily_flutter (0.1.0):
+  - daily_flutter (0.40.0):
+    - DailyFlutter-iOS (= 0.40.0)
+    - Flutter
+  - DailyFlutter-iOS (0.40.0):
     - Flutter
   - Flutter (1.0.0)
   - permission_handler_apple (9.3.0):
@@ -10,6 +13,10 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
+SPEC REPOS:
+  trunk:
+    - DailyFlutter-iOS
+
 EXTERNAL SOURCES:
   daily_flutter:
     :path: ".symlinks/plugins/daily_flutter/ios"
@@ -19,7 +26,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
-  daily_flutter: f20623ac4ef524e2238184698ae42b1b31306ef7
+  daily_flutter: 34741faed3e79820e67a696cbbbab50e4ca89af3
+  DailyFlutter-iOS: 89c98e25ae9a998c51893882dd55fc5b09e503e1
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
 
