@@ -26,6 +26,15 @@ class _RoomSettingsBarState extends State<RoomSettingsBar> {
     return Uri.tryParse(previous);
   })();
   String? _token;
+  late VideoSendSettingsCodecNameUpdate _codec = VideoSendSettingsCodecNameUpdate.values.firstWhere(
+    (it) => it.name == widget.prefs.getString('preferredCodec'),
+    orElse: () => VideoSendSettingsCodecNameUpdate.vp8,
+  );
+
+  /// The codecs that can be picked: every value but `fromDefaults`.
+  static final _codecs = VideoSendSettingsCodecNameUpdate.values.whereNot(
+    (it) => it == VideoSendSettingsCodecNameUpdate.fromDefaults,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -98,12 +107,42 @@ class _RoomSettingsBarState extends State<RoomSettingsBar> {
               ),
             ),
             const SizedBox(width: 4),
+            // The codec is chosen when the camera track is first sent, so it can only be changed
+            // before joining or after leaving.
+            PopupMenuButton<VideoSendSettingsCodecNameUpdate>(
+              enabled: canJoin,
+              tooltip: 'Preferred codec',
+              initialValue: _codec,
+              onSelected: (codec) {
+                unawaited(widget.prefs.setString('preferredCodec', codec.name));
+                setState(() => _codec = codec);
+              },
+              itemBuilder: (_) => [
+                for (final codec in _codecs) PopupMenuItem(value: codec, child: Text(codec.name.toUpperCase())),
+              ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                child: Text(
+                  _codec.name.toUpperCase(),
+                  style: theme.textTheme.bodyMedium?.copyWith(color: canJoin ? null : theme.disabledColor),
+                ),
+              ),
+            ),
             TextButton(
               onPressed: isLoading || url == null
                   ? null
                   : () async {
+                      final clientSettings = ClientSettingsUpdate.set(
+                        publishing: PublishingSettingsUpdate.set(
+                          camera: CameraPublishingSettingsUpdate.set(
+                            sendSettings: VideoSendSettingsUpdate.set(preferredCodec: _codec),
+                          ),
+                        ),
+                      );
                       try {
-                        await (canJoin ? widget.client.join(url: url, token: _token) : widget.client.leave());
+                        await (canJoin
+                            ? widget.client.join(url: url, clientSettings: clientSettings, token: _token)
+                            : widget.client.leave());
                       } on OperationFailedException catch (error, trace) {
                         logger.severe('Failed to ${canJoin ? 'join' : 'leave'} call', error, trace);
                       }
